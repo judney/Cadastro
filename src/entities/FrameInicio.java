@@ -8,15 +8,18 @@ package entities;
 
 import java.awt.Button;
 import java.awt.Color;
-import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.sql.Connection;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.sql.SQLException;
+import java.text.ParseException;
 
+import javax.swing.DefaultComboBoxModel;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -30,6 +33,9 @@ import db.CadastroPojo;
 import db.ContatoDAO;
 //import javax.swing.JFormattedTextField$AbstractFormatter;
 import db.DB;
+
+
+
 
 //public class FrameInicio extends JFrame {
 
@@ -51,8 +57,11 @@ public class FrameInicio extends JFrame{
         private JTextField txtUf;
         //private JTextField txtCpf;
         private Integer codCli= 0 ; 
-     
-
+        private String opt ;
+        private String vrCpf ; 
+        
+        
+        
          
         public  FrameInicio() throws Exception {
                 setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -63,13 +72,14 @@ public class FrameInicio extends JFrame{
                 setContentPane(contentPane);
                 getContentPane().setLayout(null) ; 
                 contentPane.setLayout(null);
+                contentPane.paintComponents(getGraphics());
 
 
                 JLabel lblTitulo = new JLabel("Cadastro de Clientes");
                 lblTitulo.setFont(new Font("Lucida Grande", Font.BOLD, 20));
                 contentPane.add(lblTitulo);
 
-                lblTitulo.setBounds(250, 20, 400, 16);
+                lblTitulo.setBounds(293, 20, 400, 16);
 
                 JLabel lblCodigo = new JLabel("Código..: ") ; 
                 lblCodigo.setBounds(16, 59, 70, 20);
@@ -241,8 +251,9 @@ public class FrameInicio extends JFrame{
                 contentPane.add(lblComplemento);
 
                 txtComplemento = new JTextField("N/A");
-                txtComplemento.setCaretPosition(0);
                 txtComplemento.setBounds(76, 147, 84, 20);
+                txtComplemento.setCaretPosition(0);
+                
                 contentPane.add(txtComplemento);
 
                 JLabel lblBairro = new JLabel("Bairro.:");
@@ -281,7 +292,7 @@ public class FrameInicio extends JFrame{
 
                                 if ( resposta==0 )
                                   {
-                                        JOptionPane.showMessageDialog(null, "Incluindo dados iniciais do cliente"+txtNome.getText());
+                                     JOptionPane.showMessageDialog(null, "Incluindo dados iniciais do cliente  : "+txtNome.getText());
                                      CadastroPojo cadastro = new CadastroPojo();
                                      
                                      
@@ -304,7 +315,7 @@ public class FrameInicio extends JFrame{
                                      //txtNumero.getText();
                                      
 
-                                     System.out.println(txtBairro.getText()) ; 
+                                     //System.out.println(txtBairro.getText()) ; 
                                      ContatoDAO dao;
                                         try {
                                                 dao = new ContatoDAO();
@@ -313,9 +324,19 @@ public class FrameInicio extends JFrame{
                                                 //contentPane.add(txtCodigo );
                                                 codCli=leNextCodigo() ; 
                                                 txtCodigo.setText(codCli.toString());
-
                                                 //System.out.printf("linha 342 ..: %s \n ", codCli );; 
-                                                txtNome.requestFocus();
+                                               // txtNome.requestFocus();
+                                               txtNome.setEnabled(false ); 
+                                               txtCep.setEnabled(false);
+                                               txtLogradouro.setEnabled(false); 
+                                               txtNumero.setEnabled(false); 
+                                               txtComplemento.setEnabled(false); 
+                                               txtBairro.setEnabled(false); 
+                                               txtCidade.setEnabled(false); 
+                                               txtUf.setEnabled(false); 
+                                               
+                                                
+                                                
                                                  
                                         } catch (SQLException e1) {
                                                 // TODO Auto-generated catch block
@@ -330,67 +351,94 @@ public class FrameInicio extends JFrame{
                 txtUf.setCaretPosition(0);
                 txtUf.setBounds(759, 147, 35, 20);
                 contentPane.add(txtUf);
-
-
+                
+                
 
                 JLabel lblDiv = new JLabel("-------------------------------------------------------------------------------------------------"); 
-                lblDiv.setBounds(16, 221, 778, 20);
+                lblDiv.setBounds(16, 243, 778, 20);
                 contentPane.add(lblDiv);
-
-
-
-                /*
-                 JPanel pnlOptDoc = new JPanel();
+          
+                
+                
+                JLabel lblDoc = new JLabel( "Tp Doc.: ");
+        		lblDoc.setBounds(16, 190, 108, 20);
+                contentPane.add(lblDoc) ;
+                
+                //JTextField txtDoc = new JTextField() ; 
+                
+                
+                
+                JComboBox<TipoDoc> cmbDoc = new JComboBox<>();
+                cmbDoc.setModel(new DefaultComboBoxModel<>(TipoDoc.values()));     
+                cmbDoc.setBounds(76, 190, 105, 20);
+                
                  
-                pnlOptDoc.setBounds(16, 198, 136, 95);
-                contentPane.add(pnlOptDoc);
-                pnlOptDoc.setLayout(null);
-
-                JLabel lblTipoDeDocumento = new JLabel("Tipo de Documento");
-                lblTipoDeDocumento.setToolTipText("");
-                lblTipoDeDocumento.setBounds(6, 6, 124, 16);
-                pnlOptDoc.add(lblTipoDeDocumento);
-
-
-                JRadioButton rdbtnCnpj = new JRadioButton("CNPJ");
-                rdbtnCnpj.setBounds(6, 66, 62, 23);
-                pnlOptDoc.add(rdbtnCnpj);
-
-                JRadioButton rdbtnNewRadioButton = new JRadioButton("CPF");
-                rdbtnNewRadioButton.setBounds(6, 34, 55, 23);
-                pnlOptDoc.add(rdbtnNewRadioButton);
-
-                 
-
-                JLabel lblDoc = new JLabel("Documento");
-                lblDoc.setBounds(16, 307, 84, 20);
-                lblDoc.setVisible(false);  
-                contentPane.add(lblDoc);
-
-                JTextField txtDoc = new JTextField("Documento");
-                txtDoc.setCaretPosition(0);
-                txtDoc.setBounds(112, 307, 117, 20);
-                txtDoc.setVisible( false ); 
-                contentPane.add(txtDoc);
-                */ 
-
-
-                /*JTable jtblClientes = new JTable() ; 
-                jtblClientes.setBounds(16, 293, 778, 136);
-                jtblClientes.setVisible(true);
-                contentPane.add(jtblClientes); 
-                */
-
-
-
-
-
-
-
-
-
-
-
+                cmbDoc.addItemListener((ItemListener) new ItemListener() {
+                    public void itemStateChanged(ItemEvent e) {
+                        if(e.getStateChange() == ItemEvent.SELECTED) // para evitar duplicações
+                            System.out.println("Você escolheu a opção " + e.getItem());
+                            opt=e.getItem().toString();
+                            if  ( opt== "Cpf")
+                            { 
+                            	lblDoc.setText("Cpf ..: "); 
+                            	JFormattedTextField txtCpf;
+								try {
+									txtCpf = new JFormattedTextField(new MaskFormatter("###.###.###-##") );
+									 cmbDoc.addItemListener((ItemListener) new ItemListener() {
+						                    public void itemStateChanged(ItemEvent e) {
+						                           vrCpf = txtCpf.getText();
+						                           
+						                           boolean testeCpf=validaCPF.isCPF(vrCpf ); 
+						                           if ( ! testeCpf  ){ 
+						                        	   System.out.println("CPF Invalido ");
+						                           }
+						                           
+						                    }   
+						               });
+									 
+									txtCpf.setBounds(76, 190, 120, 20);
+	                            	contentPane.add(txtCpf);
+								} catch (ParseException e1) {
+									
+									e1.printStackTrace();
+								}
+                             
+                            }
+                            else 
+                            { 
+                            	lblDoc.setText("Cnpj..: "); 
+                            	
+							    JFormattedTextField txtCnpj;
+								try {
+								
+									txtCnpj = new JFormattedTextField(new MaskFormatter("##.###.###/####-##") );
+									txtCnpj.setBounds(76, 190, 160, 20);
+								    contentPane.add(txtCnpj);
+								} catch (ParseException e1) {
+									
+									e1.printStackTrace();
+								}
+							     
+                            } 
+                            	
+                            
+                            cmbDoc.setVisible(false); 
+                            
+                                        
+                            
+                            
+                            
+                    }
+                });
+                
+                
+                
+                
+                
+                
+                contentPane.add(cmbDoc) ; 
+                
+                
                 Button btnSair = new Button("Sair");
                 btnSair.addActionListener(new ActionListener() {
                         public void actionPerformed(ActionEvent e) {
@@ -409,20 +457,11 @@ public class FrameInicio extends JFrame{
                 txtCpf.setBounds(112, 307, 117, 20);
                 contentPane.add(txtCpf);
                 */
-
-
-
-
-
-
-
-
-
-
-
-
                 }
-
+    
+           
+        
+        
 
             public static  Endereco  veCep ( String  cep) throws Exception    {
                     //System.out.printf("CEP ....::: %s\n\n\n ",cep);
@@ -437,8 +476,17 @@ public class FrameInicio extends JFrame{
                         endereco = ServicoDeCep.buscaEnderecoPelo(cep);
                    //   System.out.println("Endereço Retornado  :"+ endereco );
                        
-                return(  endereco ) ; 
+                return(  endereco ) ;
+                
+                
+                
+                
+                
+                
+                
         }
+          
+            
             
             public static Integer  leNextCodigo() throws SQLException { 
             

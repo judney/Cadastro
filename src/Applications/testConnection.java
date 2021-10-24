@@ -1,5 +1,9 @@
 package Applications;
 
+import java.sql.Connection;
+
+import db.DB;
+
 public class testConnection {
 
 	public static void main(String[] args) {

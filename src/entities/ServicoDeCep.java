@@ -7,11 +7,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-import javax.swing.JOptionPane;
+//import javax.swing.JOptionPane;
 
 import com.google.gson.Gson;
 
-import Applications.TelaInicio;
+//import Applications.TelaInicio;
 
 public class ServicoDeCep {
     static String webService = "http://viacep.com.br/ws/";
