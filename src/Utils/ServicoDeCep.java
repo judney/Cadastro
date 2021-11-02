@@ -1,4 +1,4 @@
-package entities;
+package Utils;
 
 
 
@@ -43,6 +43,7 @@ public class ServicoDeCep {
                     return endereco;
             }
         } catch (Exception e) {
+        	
             throw new Exception("ERRO: " + e);
         }
     }

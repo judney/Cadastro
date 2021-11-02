@@ -1,4 +1,4 @@
-package entities;
+package Utils;
 import java.util.InputMismatchException;
 
 public class validaCNPJ {

@@ -1,4 +1,4 @@
-package entities;
+package Utils;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -74,7 +74,34 @@ public class ValidaData {
 	
 	
 	} 	
+	
+	//Recebe string no formato dd/mm/yyyy e retorna um sqldate para insert em database 	
+	public static java.sql.Date stringTosqlDate(String data1 ) {
 		
+	
+	 //System.out.printf("Data em String %s \n" , data1 ); 
+     
+     SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy"); 
+     java.util.Date dtAux1=null;
+		try {
+			dtAux1 = formato.parse(data1);
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+     //System.out.printf("Formatada para Date ..:%s \n ",  formato.format(dtAux1));
+     long timeInMilliSeconds =dtAux1.getTime(); 
+     java.sql.Date dtAux2  = new java.sql.Date(timeInMilliSeconds) ; 
+     
+     //dtAux2=dtAux1.getTime(); 
+     //System.out.printf("Formatada para Date ( Sql ) ..:%s \n ",  formato.format(dtAux2));
+     
+	
+	return dtAux2 ; 
+	
+	} 
+	
+	
 	
 	
 }

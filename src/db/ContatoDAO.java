@@ -1,11 +1,15 @@
 package db;
 
+import java.sql.Date;
+
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
-
+import Utils.ValidaData;
 public class ContatoDAO {
         public java.sql.Connection connection;
 
@@ -18,10 +22,49 @@ public class ContatoDAO {
                 // prepared statement para inserção
                 PreparedStatement stmt = (PreparedStatement) ((java.sql.Connection) this.connection)
                                 .prepareStatement("insert into clientes"
-                                                + "(codigo, nome, cep, Logradouro , numero, complemento , bairro , cidade , uf   ) "
-                                                + "values (?, ?, ?, ?  , ? , ?, ? ,? , ?  )");
+                                                + "("
+                                                + "codigo,"
+                                                + " nome, "
+                                                + "cep, "
+                                                + "Logradouro ,"
+                                                + " numero, "
+                                                + "complemento ,"
+                                                + " bairro , "
+                                                + "cidade , "
+                                                + "UF, "
+                                                + "tipoDoc , "
+                                                + "documento, "
+                                                + "identidade , "
+                                                + "emissor,   "
+                                                + "dataEmiss,"
+                                                + "dataNasc,"
+                                                + "EstCivil, "
+                                                + "Nacionalidade, "
+                                                + "Naturalidade,"
+                                                + "Obs"
+                                                +  "   ) "
+                                                + "values ("
+                                                + "?,"
+                                                + "?,"
+                                                + "?,"
+                                                + "?,"
+                                                + "?,"
+                                                + "?,"
+                                                + "?,"
+                                                + "?,"
+                                                + "?,"
+                                                + "?,"
+                                                + "?,"
+                                                + "?,"
+                                                + "?,"
+                                                + "?,"
+                                                + "?,"
+                                                + "?,"
+                                                + "?,"
+                                                + "?,"
+                                                + "? "
+                                                + " )");
             
-        //System.out.println("Bairro  : "+ cadast.getBairro());
         
                 stmt.setInt(1, cadast.getCodigo());
                 stmt.setString(2, cadast.getNome()); 
@@ -32,6 +75,24 @@ public class ContatoDAO {
                 stmt.setString(7, cadast.getBairro());
                 stmt.setString(8, cadast.getCidade());
                 stmt.setString(9, cadast.getUF());
+                stmt.setString(10,cadast.getTipoDoc());
+                String var="1" ; 
+                if ( cadast.getTipoDoc().equals(var) )
+                	
+                    stmt.setString(11,cadast.getCpf() ) ;
+                else 
+                stmt.setString(11, cadast.getCnpj());
+                stmt.setString(12, cadast.getIdentidade());
+                stmt.setString(13,cadast.getEmissor());
+                stmt.setDate(14,  ValidaData.stringTosqlDate(cadast.getDataEmiss()));
+                stmt.setDate(15,  ValidaData.stringTosqlDate(cadast.getDataNasc())); 
+                stmt.setString(16, cadast.getEstCivil());
+                stmt.setString(17, cadast.getNacionalidade());
+                stmt.setString(18, cadast.getNaturalidade());
+                stmt.setString(19,cadast.getObs());
+                
+                System.out.println(stmt);
+                
                 stmt.execute();    
                 stmt.close();
         }

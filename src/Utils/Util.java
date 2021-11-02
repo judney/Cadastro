@@ -1,4 +1,4 @@
-package entities;
+package Utils;
 
 //public class converteJsonEmString {
 

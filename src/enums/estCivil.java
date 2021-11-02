@@ -1,6 +1,7 @@
-package entities;
+package enums;
 
 public enum estCivil {
+	Nao_informado  ,   
 	Solteiro   , 
 	Casado ,
 	Desquitado , 
@@ -9,3 +10,4 @@ public enum estCivil {
 	
 
 }; 
+
