@@ -30,6 +30,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
+import db.TableFromMySqlDatabase;
 import db.CadastroPojo;
 import db.ContatoDAO;
 import db.DB;
@@ -46,6 +47,7 @@ import Utils.ValidaData;
 public class TelaCliente extends JFrame {
 
 	private static final long serialVersionUID = 1L;
+	public JTextField txtNome ; 
 	private JPanel contentPane;
 	private JTextField txtLogradouro;
 	private JTextField txtNumero;
@@ -95,6 +97,23 @@ public class TelaCliente extends JFrame {
 		getContentPane().setLayout(null);
 		contentPane.setLayout(null);
 		
+		
+		 TableFromMySqlDatabase frameJtable  = new TableFromMySqlDatabase();
+         //frameJtable.setDefaultCloseOperation( EXIT_ON_CLOSE );
+         frameJtable.pack();
+         frameJtable.setVisible(true);
+         frameJtable.setBounds(0,300,700,200); 
+         frameJtable.setVisible(true);
+         frameJtable.setVisible(true) ;
+         contentPane.add(frameJtable); 
+		
+		
+		
+		
+		//TableFromMySqlDatabase.
+		
+		//contentPane.add(TableFromMySqlDatabase.table);
+		
 		JLabel lblTitulo = new JLabel("Cadastro de Clientes");
 		lblTitulo.setFont(new Font("Lucida Grande", Font.BOLD, 20));
 		contentPane.add(lblTitulo);
@@ -122,7 +141,7 @@ public class TelaCliente extends JFrame {
 		lblNome.setBounds(175, 59, 70, 20);
 		contentPane.add(lblNome);
 
-		JTextField txtNome = new JTextField("Nome Cliente ");
+	    txtNome = new JTextField("Nome Cliente ");
 		txtNome.addKeyListener(new KeyAdapter() {
 			public void keyTyped(KeyEvent e) { 
 		        if (txtNome.getText().length() >= 50 ) // limit textfield to 50 characters
@@ -143,6 +162,9 @@ public class TelaCliente extends JFrame {
 			}
 
 		});
+
+
+
 
 		txtNome.setBounds(228, 59, 566, 20);
 		txtNome.setCaretPosition(0);
@@ -527,11 +549,12 @@ public class TelaCliente extends JFrame {
 		//txtNaturalidade.setVisible(false); 
 		contentPane.add(txtNaturalidade);
 		
+		/*
 		JLabel lblDiv = new JLabel(
 				"-------------------------------------------------------------------------------------------------");
 		lblDiv.setBounds(16, 350, 778, 20);
 		contentPane.add(lblDiv);
-
+         */ 
 
 		JLabel lblObs = new JLabel("Obs..: ") ;
 		lblObs.setBounds(16,270,50,20);
@@ -670,8 +693,8 @@ public class TelaCliente extends JFrame {
 			}
 	    }); 
 		btnIncluir.setForeground(Color.RED);
-		btnIncluir.setBounds(500, 400, 117, 29);
-		btnIncluir.setVisible(false);
+		btnIncluir.setBounds(690, 360, 100, 29);
+		//btnIncluir.setVisible(false);
 		contentPane.add(btnIncluir);
 		
 		txtObs.addFocusListener(new FocusAdapter() {
@@ -682,6 +705,193 @@ public class TelaCliente extends JFrame {
 				
 			}
 		}); 	
+
+		
+		// Alterar 
+		
+		JButton btnAlterar = new JButton("Alterar"); 
+    	
+		btnAlterar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+		
+				Object[] options = { "Confirmar", "Cancelar" };
+
+				int resposta = JOptionPane.showOptionDialog(null, "Confirma a alteração  ? ", "Informação",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+
+						if (resposta == 0) {
+							CadastroPojo cadastro = new CadastroPojo();
+
+							cadastro.setCodigo(codCli);
+							cadastro.setNome(txtNome.getText());
+							String cep = txtCep.getText();
+							String cepAux = cep.replaceAll("-", "");
+							cep = cepAux;
+							cadastro.setCep(cep);
+							cadastro.setLogradouro(txtLogradouro.getText());
+							cadastro.setNumero(txtNumero.getText());
+							cadastro.setComplemento(txtComplemento.getText());
+							cadastro.setBairro(txtBairro.getText());
+							cadastro.setCidade(txtCidade.getText());
+							cadastro.setUF(txtUf.getText());
+							// 01/11
+							cadastro.setTipoDoc(tipoDoc.toString() );
+							cadastro.setObs(txtObs.getText());
+						
+							
+							if ( tipoDoc == 1)
+							   cadastro.setCpf(txtCpf.getText());
+							else 
+								cadastro.setCnpj(txtCnpj.getText());
+							cadastro.setIdentidade(txtIdt.getText());
+							cadastro.setEmissor(txtEmiss.getText());
+							
+							
+							//Date dataEmissAux = null ; 
+							
+							
+							cadastro.setDataEmiss(txtDtEmiss.getText()) ;
+							cadastro.setDataNasc(txtDtNasc.getText());
+							cadastro.setEstCivil(txtEstCivil.getText());
+							cadastro.setNacionalidade(txtNacionalidade.getText());
+							cadastro.setNaturalidade(txtNaturalidade.getText());
+							
+							
+							ContatoDAO dao;
+							try {
+								dao = new ContatoDAO();
+								dao.adiciona(cadastro);
+								insereCod(codCli);
+								codCli = leNextCodigo();
+								txtCodigo.setText(codCli.toString());
+								lblDoc.setVisible(true);
+								cmbDoc.setVisible(true);
+				
+							} catch (SQLException e1) {
+								e1.printStackTrace();
+							}
+						} 
+			}
+	    }); 
+		btnAlterar.setForeground(Color.RED);
+		btnAlterar.setBounds(690, 390, 100, 29);
+		//btnIncluir.setVisible(false);
+		contentPane.add(btnAlterar);
+
+		
+		
+		
+		//Fim Alterar 
+		
+		
+		// Inicio Excluir 
+		
+		
+		JButton btnExcluir = new JButton("Excluir "); 
+    	
+		btnExcluir.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+		
+				Object[] options = { "Confirmar", "Cancelar" };
+
+				int resposta = JOptionPane.showOptionDialog(null, "Confirma a exclusão ? ", "Informação",
+						JOptionPane.DEFAULT_OPTION, JOptionPane.WARNING_MESSAGE, null, options, options[0]);
+
+						if (resposta == 0) {
+							CadastroPojo cadastro = new CadastroPojo();
+
+							cadastro.setCodigo(codCli);
+							cadastro.setNome(txtNome.getText());
+							String cep = txtCep.getText();
+							String cepAux = cep.replaceAll("-", "");
+							cep = cepAux;
+							cadastro.setCep(cep);
+							cadastro.setLogradouro(txtLogradouro.getText());
+							cadastro.setNumero(txtNumero.getText());
+							cadastro.setComplemento(txtComplemento.getText());
+							cadastro.setBairro(txtBairro.getText());
+							cadastro.setCidade(txtCidade.getText());
+							cadastro.setUF(txtUf.getText());
+							// 01/11
+							cadastro.setTipoDoc(tipoDoc.toString() );
+							cadastro.setObs(txtObs.getText());
+						
+							
+							if ( tipoDoc == 1)
+							   cadastro.setCpf(txtCpf.getText());
+							else 
+								cadastro.setCnpj(txtCnpj.getText());
+							cadastro.setIdentidade(txtIdt.getText());
+							cadastro.setEmissor(txtEmiss.getText());
+							
+							
+							//Date dataEmissAux = null ; 
+							
+							
+							cadastro.setDataEmiss(txtDtEmiss.getText()) ;
+							cadastro.setDataNasc(txtDtNasc.getText());
+							cadastro.setEstCivil(txtEstCivil.getText());
+							cadastro.setNacionalidade(txtNacionalidade.getText());
+							cadastro.setNaturalidade(txtNaturalidade.getText());
+							
+							
+							ContatoDAO dao;
+							try {
+								dao = new ContatoDAO();
+								dao.adiciona(cadastro);
+								insereCod(codCli);
+								codCli = leNextCodigo();
+								txtCodigo.setText(codCli.toString());
+								lblDoc.setVisible(true);
+								cmbDoc.setVisible(true);
+				
+							} catch (SQLException e1) {
+								e1.printStackTrace();
+							}
+						} 
+			}
+	    }); 
+		btnExcluir.setForeground(Color.RED);
+		btnExcluir.setBounds(690, 420, 100, 29);
+		//btnIncluir.setVisible(false);
+		contentPane.add(btnExcluir);
+
+		
+		
+		//Fim Excluir 
+		
+		
+		
+		// Inicio Consultar 
+		JButton btnConsultar = new JButton("Consultar"); 
+    	
+
+        //tableFromMySqlDatabase.ta
+		
+		
+		
+		btnConsultar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+		
+			//int vrCons = TableFromMySqlDatabase. 	
+				//db.TableFromMySqlDatabase.ta
+				
+				
+				
+				
+							}
+	    }); 
+		
+		
+		btnConsultar.setForeground(Color.RED);
+		btnConsultar.setBounds(690, 450, 100, 29);
+		//btnIncluir.setVisible(false);
+		contentPane.add(btnConsultar);
+
+		
+		
+		// Fim Consultar 
+		
 		
 		JButton btnSair = new JButton("Sair");
 		btnSair.addActionListener(new ActionListener() {
@@ -693,16 +903,9 @@ public class TelaCliente extends JFrame {
 		});
 
 		
-		
-		
-		
-		
-		
 		btnSair.setForeground(Color.RED);
-		btnSair.setBounds(660, 400, 117, 29);
+		btnSair.setBounds(690, 480, 100, 29);
 		contentPane.add(btnSair);
-		
-				
 		
 
 }

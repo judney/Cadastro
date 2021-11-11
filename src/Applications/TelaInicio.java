@@ -1,5 +1,7 @@
 package Applications;
 
+import db.TableFromMySqlDatabase;
+
 //import java.text.ParseException;
 
 //import entities.FrameInicio;
@@ -9,14 +11,15 @@ public class TelaInicio {
 
         public static void main(String[] args) throws Exception {
 
-                //FrameInicio frame = new FrameInicio() ;
+               
                 TelaCliente frame = new TelaCliente() ; 
                 
-                //btnSair.setBounds(660, 500, 117, 29);
                 frame.setBounds(10,10,800,550); 
+               
                 
                 
-                frame.setVisible(true) ;
+                TableFromMySqlDatabase frame1 = new TableFromMySqlDatabase();
+                frame.setVisible(true);
 
         }
 
